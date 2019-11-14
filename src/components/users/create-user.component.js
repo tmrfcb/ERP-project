@@ -41,7 +41,7 @@ export default class CreateUser extends Component {
       
         const newUser = {
             user_description: this.state.user_description,
-            tuser_responsible: this.state.user_responsible,
+            user_responsible: this.state.user_responsible,
             user_priority: this.state.user_priority,
             user_completed: this.state.user_completed
         };
