@@ -8,11 +8,26 @@ const PORT = 4000;
 let User = require('./user.model');
 
 
-
+var whitelist = ['http://localhost:3000']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORScc'))
+    }
+  }
+}
+app.use(cors(corsOptions));
 
 app.use('/users', userRoutes);
-app.use(cors());
+
+
+
 app.use(bodyParser.json());
+
+
+
 
 mongoose.connect('mongodb://127.0.0.1:27017/erp', { useNewUrlParser: true });
 const connection = mongoose.connection;
@@ -30,7 +45,7 @@ userRoutes.route('/').get(function(req, res) {
         if (err) {
             console.log(err);
         } else {
-            res.json(users);
+            res.json(Users);
         }
     });
 });
@@ -45,7 +60,7 @@ userRoutes.route('/:id').get(function(req, res) {
 userRoutes.route('/add').post(function(req, res) {
     let user = new User(req.body);
     user.save()
-        .then(todo => {
+        .then(user => {
             res.status(200).json({'todo': 'user added successfully'});
         })
         .catch(err => {
